@@ -46,7 +46,7 @@
 	}
 	catch (Zend_Db_Adapter_Exception $e) 
 	{
-		$logger->log(Vp_Util::formatException($e), Zend_Log::NOTICE);
+		$logger->log(Gtwebdev_Util::formatException($e), Zend_Log::NOTICE);
 	    // perhaps a failed login credential, or perhaps the RDBMS is not running
 	}
 	

@@ -1,6 +1,6 @@
 <?php
 require_once("Abstract.php");
-class Contact_IndexController extends Login_Controller_Abstract
+class Home_IndexController extends Home_Controller_Abstract
 {
 	public function indexAction()
 	{
