@@ -1,0 +1,58 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+div#scroller
+{
+	width: 200px;
+	height: 70px;
+	border: green solid 3px;
+	font-size: 28px;
+	font-family: "Comic Sans MS", "Comic Sans", Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	color: blue;
+}
+
+div#scroller form
+{
+	display: none;
+}
+
+div#scroller form.firstChild
+{
+	display: block;
+	height: 100%;
+	width: 100%;
+}
+
+div#scroller form p
+{
+	float: left;
+	vertical-align: middle;
+	margin-top: 0px;
+	width: 115px;
+	height: 70px;
+}
+
+div#scroller form button
+{
+	width: 80px;
+	height: 30px;
+	margin-top: 3px;
+	display: block;
+	float: right;
+	clear: right;
+	background: transparent;
+	border: none;
+	color: transparent;
+}
+
+div#scroller form button.next
+{
+	background-image: url(http://www.gtwebdev.org/test/scroller/images/next.png);
+}
+
+div#scroller form button.previous
+{
+	background-image: url(http://www.gtwebdev.org/test/scroller/images/prev.png);
+}

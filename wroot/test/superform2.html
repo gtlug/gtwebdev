@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>NiX0n's &lt;SUPERFORM VERSION="2.0" /&gt;</title>
+<style type="text/css">
+<!--
+.value{vertical-align:top;}
+-->
+</style>
+<script src="/js/prototype.js" type="text/javascript" language="javascript"></script>
+<script type="text/javascript">
+<!--
+
+/**
+ * Our master input clone 
+ */
+var modelInput = null;
+
+/**
+ * Set up the environment for use
+ */
+Event.observe(window, 'load', function (event)
+{
+	$('superFormInput').reset();
+	modelInput = getModelInput();
+	Event.observe('superFormInput', 'submit', function (event)
+	{
+		if(populateSuperFormOutput())
+		{
+			$('superFormOutput').submit();
+			//alert(Object.toJSON($('superFormOutput').serialize(true)));
+		}
+		Event.stop(event);
+	});
+});
+
+/**
+ * From the untouched DOM tree, get a master clone for further cloning
+ */
+function getModelInput()
+{
+	return $($('inputs').firstDescendant().cloneNode(true));
+}
+
+/**
+ * Remove the current row from the DOM tree
+ */
+function removeInput(element)
+{
+	$(element.parentNode.parentNode).remove();
+}
+
+/**
+ * add a master clone clone to 'inputs'
+ */
+function addInput()
+{
+	$('inputs').appendChild(modelInput.cloneNode(true));
+}
+
+/**
+ * Translate all the inputs into real form data,
+ * and populate superFormOutput with it.
+ */
+function populateSuperFormOutput()
+{
+	var sf = $('superFormOutput');
+	sf.innerHTML = "";
+	var inputRows = $('inputs').immediateDescendants();
+	
+	// set up our action/method
+	sf.action = $F('action');
+	sf.method = $F('method');
+	
+	// populate inputs
+	for(i = 0; i < inputRows.length; i++)
+	{
+		var newInput = document.createElement('input');
+		newInput.type = "hidden";
+		newInput.name = $F(inputRows[i].getElementsByClassName('name')[0]);
+		newInput.value = $F(inputRows[i].getElementsByClassName('value')[0]);
+		sf.appendChild(newInput);
+	}
+	return true;
+}
+//-->
+</script>
+</head>
+
+<body>
+<noscript>This page requires Javascript to be enabled.</noscript>
+<form id="superFormInput" method="post" action="javascript://void">
+<table>
+<thead>
+	<tr>
+		<td colspan="3"
+		><label for="action">&lt;FORM ACTION="</label><input 
+		type="text" 
+		id="action"
+		name="action" 
+		size="50" /><label for="method">" METHOD="</label><select 
+			name="method" 
+			id="method">
+				<option value="post">POST</option>
+				<option value="get">GET</option>
+		</select>"&gt;</td>
+	</tr>
+</thead>
+<tfoot>
+	<tr><td><a href="javascript://void" onclick="addInput();">Add</a></td></tr>
+	<tr><td colspan="3">&lt;/FORM&gt;</td></tr>
+	<tr>
+		<td colspan="3"><button type="submit">Submit</button><button type="reset">Reset</button></td>
+	</tr>
+</tfoot>
+<tbody id="inputs">
+	<tr valign="top">
+		<td><a href="javascript://void" onclick="removeInput($(this));">Remove</a></td>
+		<td>&lt;INPUT NAME="<input type="text" class="name" />"</td>
+		<td>VALUE="<textarea cols="50" rows="3" class="value"></textarea>" /&gt;</td>
+	</tr>
+</tbody>
+</table>
+</form>
+<form id="superFormOutput" action="" method="post"></form>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>NiX0n's &lt;SUPERFORM&gt;</title>
+<script type="text/javascript">
+	function fixSuperform()
+	{
+		document.SuperForm.action 			= document.setSuperForm.setAction.value;
+		document.SuperForm.method 			= document.setSuperForm.setMethod.value;
+		document.getElementById("sf0").name = document.setSuperForm.setInputName.value;
+		document.getElementById("sf0").value= document.setSuperForm.setInputValue.value;
+	}
+</script>
+</head>
+
+<body>
+<form name="setSuperForm">
+	<p>
+		&lt;FORM ACTION="<input type="text" name="setAction" size="50" onchange="fixSuperform()" />" METHOD="<select name="setMethod" onchange="fixSuperform()">
+			<option value="POST">POST</option>
+			<option value="GET">GET</option>
+		</select>"&gt
+	</p>
+	<p style="margin-left:10px;">
+		&lt;INPUT NAME="<input type="text" name="setInputName" onchange="fixSuperform()" />" VALUE="<textarea name="setInputValue" cols="50" rows="5" onchange="fixSuperform()" style="vertical-align:top;"></textarea>"&gt
+	</p>
+	<p>&lt;/FORM&gt;<input type="reset" /></p>
+</form>
+<form name="SuperForm" action="" method=""><input type="hidden" id="sf0" />
+	<p><input type="submit" /></p>
+</form>
+</body>
+</html>
