@@ -98,7 +98,7 @@
 	Zend_Controller_Action_HelperBroker::addHelper($contextSwitch);
 	
 	Zend_Layout::startMvc(array(
-		'layout'		=> 'default',
+		'layout'		=> 'speedy',
 		'layoutPath'	=> $appication_root . 'layouts',
 		'viewSuffix'	=> 'html.php'
 	));
