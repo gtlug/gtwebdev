@@ -1,0 +1,34 @@
+body, h1, ol, ul, li, table, tr, td, th
+{
+    padding: 0px;
+    margin: 0px;
+}
+
+a
+{
+    color: blue;
+    text-decoration: none;
+}
+
+a:hover
+{
+    text-decoration: underline;
+}
+
+th
+{
+	vertical-align: top;
+	text-align: left;
+}
+
+thead th
+{
+	font-size: larger;
+	text-decoration: underline;
+	padding-bottom: 10px; 
+}
+
+tbody td
+{
+	padding-left: 10px;
+}

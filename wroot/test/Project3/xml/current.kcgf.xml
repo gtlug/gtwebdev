@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsltConfig xmlns="http://www.NiX0n.org/CIT220/Project3/xsltConfig"
+	baseUrl="http://www.weather.gov/xml/current_obs/KCGF.xml">
+	<!-- param name="zipCodeList" value="49686" />
+	<param name="product" value="time-series" />
+	<param name="begin" value="2009-04-13T00:00:00" />
+	<param name="end" value="2009-04-13T24:00:00" />
+	<param name="mint" value="mint" />
+	<param name="maxt" value="maxt" />
+	<param name="wspd" value="wspd" />
+	<param name="wdir" value="wdir" />
+	<param name="wx" value="wx" />
+	<param name="icons" value="icons" /-->
+</xsltConfig>

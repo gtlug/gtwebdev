@@ -1,0 +1,12 @@
+body 
+{
+    width: 400px;
+    height: 300px;
+    background: navy;
+    color: white;
+}
+
+thead
+{
+	display: none;
+}

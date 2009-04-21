@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- 
+	NAME: 	CIT220, Project 3
+	AUTHOR:	Adam "NiX0n" VanBerlo
+	DATE:	April 20th, 2009
+	DESCRIPTION:
+	Show current, hourly, and ten day forecast weather.
+	
+	A working version of this project is available,
+	http://www.gtwebdev.org/test/Project3/index.xml
+	
+	NOTE:
+	Markup is pure XML.  MIME types are application/xml.
+	This page WILL NOT render in Internet Explorer without modification.
+	Use a standards compliant browser to view page (i.e. Firefox, Opera).
+ -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>My 1337 Weather Page</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="css/index.css"/>
+    <script type="text/javascript" src="js/prototype.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+  </head>
+  <body>
+    <h1>My 1337 Weather Page</h1>
+    <ul id="navigation">
+      <li class="selected">
+        <a href="xslt.php?mode=current">
+          <span>Current</span>
+        </a>
+      </li>
+      <li>
+        <a href="xslt.php?mode=hourly">
+          <span>Hourly</span>
+        </a>
+      </li>
+      <li>
+        <a href="xslt.php?mode=tenday">
+          <span>Ten Day</span>
+        </a>
+      </li>
+    </ul>
+    <div><object id="content" type="application/xml" data="xslt.php?mode=current" width="400" height="300"></object></div>
+  </body>
+</html>
