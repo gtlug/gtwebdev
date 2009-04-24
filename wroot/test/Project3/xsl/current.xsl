@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:php="http://php.net/xsl"
   version="1.0">
   <xsl:template match="/">
     <html xmlns="http://www.w3.org/1999/xhtml">
@@ -38,7 +39,7 @@
             <tr>
               <th>Last Update</th>
               <td>
-                <xsl:value-of select="//observation_time_rfc822"/>
+                <xsl:value-of select="php:function('date', 'Y/m/d G:ia T', php:function('strtotime', string(//observation_time_rfc822)))"/>
               </td>
             </tr>
             <tr>

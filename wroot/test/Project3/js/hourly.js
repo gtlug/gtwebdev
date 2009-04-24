@@ -21,7 +21,7 @@
             td.removeClassName('selected');
         });
         var select = 'td.col' + col;
-        alert(select);
+        //alert(select);
         $('data').select(select).each(function(td) 
         {
             td.addClassName('selected');

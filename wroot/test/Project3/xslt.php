@@ -68,6 +68,7 @@ $xslDocument->load($xslFilename);
 
 // create XSLT processor and import XSL DOM document
 $xsl = new XSLTProcessor();
+$xsl->registerPHPFunctions();
 $xsl->importStylesheet($xslDocument);
 
 // TRANSFORM! (more than meets the eye)

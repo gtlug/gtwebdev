@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns="http://www.w3.org/1999/xhtml" 
   version="1.0">
   <xsl:import href="http://www.gtwebdev.org/test/Project3/xsl/dateTime2.xsl" />
   <xsl:template match="/">
-    <html xmlns="http://www.w3.org/1999/xhtml">
+    <html>
       <head>
         <title>Hourly Weather</title>
         <link rel="stylesheet" type="text/css" href="css/common.css"/>
@@ -15,8 +16,8 @@
       <body>
       	<h1>Hourly Weather</h1>
         <xsl:apply-templates 
-          select="//time-layout[layout-key='k-p3h-n9-3']" 
-          mode="timePeriod"></xsl:apply-templates>
+          select="//time-layout[layout-key='k-p3h-n8-3']" 
+          mode="list"></xsl:apply-templates>
         <table id="data">
           <thead>
             <tr>
@@ -27,7 +28,7 @@
             <tr>
               <th>Time</th>
               <xsl:apply-templates 
-                select="//time-layout[layout-key='k-p3h-n9-3']"></xsl:apply-templates>
+                select="//time-layout[layout-key='k-p3h-n8-3']" mode="data"></xsl:apply-templates>
             </tr>
             <tr>
               <th>Conditions</th>
@@ -75,16 +76,8 @@
     </html>
   </xsl:template>
 
-  <xsl:template match="time-layout">
-      <xsl:for-each select="./start-valid-time">
-        <td xmlns="http://www.w3.org/1999/xhtml">
-          <xsl:value-of select="text()"/>
-        </td>
-      </xsl:for-each>
-  </xsl:template>
-  
-  <xsl:template match="time-layout" mode="timePeriod">
-    <ul xmlns="http://www.w3.org/1999/xhtml" id="timePeriod">
+  <xsl:template match="time-layout" mode="list">
+    <ul id="timePeriod">
       <xsl:for-each select="./start-valid-time">
         <li>
             <xsl:element name="a">
@@ -101,12 +94,19 @@
     </ul>
   </xsl:template>
 
+  <xsl:template match="time-layout" mode="data">
+      <xsl:for-each select="./start-valid-time">
+      <xsl:element name="td">
+        <xsl:attribute name="class">col<xsl:value-of select="position()"/></xsl:attribute>
+          <xsl:value-of select="./text()"/>
+      </xsl:element>
+      </xsl:for-each>
+  </xsl:template>
+
   <xsl:template match="weather-conditions">
     <xsl:for-each select=".">
       <xsl:element name="td">
-        <xsl:attribute name="class">
-          col<xsl:value-of select="position()"/>
-        </xsl:attribute>
+        <xsl:attribute name="class">col<xsl:value-of select="position()"/></xsl:attribute>
         <xsl:for-each select="./value">
           <xsl:value-of select="./@additive"/>
           <xsl:text> </xsl:text>
