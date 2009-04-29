@@ -2,9 +2,11 @@
 <xsltConfig xmlns="http://www.NiX0n.org/CIT220/Project3/xsltConfig"
 	baseUrl="http://weather.gov/forecasts/xml/sample_products/browser_interface/ndfdXMLclient.php">
 	<param name="zipCodeList" value="49686" />
-	<param name="product" value="time-series" />
-	<param name="begin" value="2009-04-23T15:00:00" />
-	<param name="end" value="2009-04-24T15:00:00" />
+	<param name="product" value="glance" />
+	<!-- UPDATE DATE RANGE BEFORE USE -->
+	<param name="begin" value="2009-04-24T15:00:00" />
+	<param name="end" value="2009-04-25T15:00:00" />
+	<!--  -->
 	<param name="mint" value="mint" />
 	<param name="maxt" value="maxt" />
 	<param name="wspd" value="wspd" />

@@ -1,0 +1,28 @@
+This project is INCOMPLETE:
+- Current weather is DONE
+- Hourly weather is basically useless.  Requires configuration change (xml/hourly.xml)
+- Ten day forecast is not implemented
+
+XSLT processor is written in PHP.  This application is available at http://www.gtwebdev.org/test/Project3/index.xml (It's highly recomended that this page be viewed in Firefox)
+
+CONTENTS:
+index.xml - Frontend interface (uses <object> to frame xslt.php contents)
+xslt.php - XSLT processor (uses contents of xml/ and xsl/ for getting source document and transforming).  ?mode=[mode] sets configuration/stylesheet used.
+xml/ - source document configurations
+	current.xml - configuration for current weather
+	hourly.xml - configuration for hourly weather
+xsl/ - XML stylesheets
+	current.xsl - current weather stylesheet
+	hourly.xsl - hourly weather stylesheet
+	dateTime2.xsl - utility date formatting stylesheet
+xsd/ - XML schemas
+	xsltConfig.xsd - schema defining xsltConfig vocabulary used in xml/
+css/ - Cascading Stylesheets
+	index.css - CSS specifically for index.xml
+	common.css - CSS common to all documents
+	current.css - CSS specifically for current weather
+	hourly.css - CSS specifically for hourly weather
+js/ - JavaScript files (required for viewing)
+	prototype.js - Prototype JavaScript framework
+	index.js - JavaScript used by index.xml
+	hourly.js - JavaScript used by hourly weather

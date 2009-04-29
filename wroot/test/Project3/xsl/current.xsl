@@ -43,7 +43,7 @@
               </td>
             </tr>
             <tr>
-              <th>Tempereture</th>
+              <th>Temperature</th>
               <td>
                 <xsl:value-of select="//temp_f" />&#xB0;F (<xsl:value-of select="//temp_c" />&#xB0;C)
               </td>

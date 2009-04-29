@@ -5,6 +5,7 @@
   version="1.0">
   <xsl:import href="http://www.gtwebdev.org/test/Project3/xsl/dateTime2.xsl" />
   <xsl:template match="/">
+  	<xsl:variable name="layoutKey"><xsl:value-of select="//time-layout[count(//time-layout)]/layout-key/text()" /></xsl:variable>
     <html>
       <head>
         <title>Hourly Weather</title>
@@ -16,7 +17,7 @@
       <body>
       	<h1>Hourly Weather</h1>
         <xsl:apply-templates 
-          select="//time-layout[layout-key='k-p3h-n8-3']" 
+          select="//time-layout[layout-key=$layoutKey]" 
           mode="list"></xsl:apply-templates>
         <table id="data">
           <thead>
@@ -28,11 +29,11 @@
             <tr>
               <th>Time</th>
               <xsl:apply-templates 
-                select="//time-layout[layout-key='k-p3h-n8-3']" mode="data"></xsl:apply-templates>
+                select="//time-layout[layout-key=$layoutKey]" mode="data"></xsl:apply-templates>
             </tr>
             <tr>
               <th>Conditions</th>
-              <xsl:apply-templates select="//weather/weather-conditions"></xsl:apply-templates>
+              <xsl:apply-templates select="//weather"></xsl:apply-templates>
             </tr>
             <!--tr>
               <th>Location</th>
@@ -47,7 +48,7 @@
               </td>
             </tr>
             <tr>
-              <th>Tempereture</th>
+              <th>Temperature</th>
               <td>
                 <xsl:value-of select="//temp_f" />&#xB0;F (<xsl:value-of select="//temp_c" />&#xB0;C)
               </td>
@@ -103,8 +104,8 @@
       </xsl:for-each>
   </xsl:template>
 
-  <xsl:template match="weather-conditions">
-    <xsl:for-each select=".">
+  <xsl:template match="weather">
+    <xsl:for-each select="./weather-conditions">
       <xsl:element name="td">
         <xsl:attribute name="class">col<xsl:value-of select="position()"/></xsl:attribute>
         <xsl:for-each select="./value">
