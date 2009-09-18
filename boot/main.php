@@ -13,8 +13,11 @@
 	require_once 'Zend/Controller/Front.php';
 
 	// allow lazy class loading
-	Zend_Loader::registerAutoload();
-
+	//Zend_Loader::registerAutoload();
+	require_once 'Zend/Loader/Autoloader.php';
+	$autoloader = Zend_Loader_Autoloader::getInstance();
+	
+	$autoloader->registerNamespace('Gtwebdev_');
 	// Force all errors to throw Exceptions
 	/*function exception_error_handler($errno, $errstr, $errfile, $errline ) 
 	{
@@ -60,7 +63,7 @@
 	}
 	catch(Exception $e)
 	{
-		$logger->log(Vp_Util::formatException($e), Zend_Log::EMERG);
+		$logger->log(Gtwebdev_Util::formatException($e), Zend_Log::EMERG);
 		return;
 	}
 	Zend_Registry::set('session',$session);
@@ -80,6 +83,9 @@
 	$view->addHelperPath('Demo/View/Helper/', 'Demo_View_Helper_');
 	$view->addBasePath($appication_root . 'views');
 	Zend_Registry::set('view',$view);
+	
+	// Set leftContent registry value for layout
+	Zend_Registry::set('leftContent', array());
 
 	$front = Zend_Controller_Front::getInstance();
 	$front->addModuleDirectory($appication_root . 'modules');
@@ -107,6 +113,7 @@
 	$view->addHelperPath('Demo/View/Helper/', 'Demo_View_Helper_');
 	Zend_Layout::getMvcInstance()->setView($view);
 	$layout_defaults = new Zend_Config_Ini($site_root. 'etc/siteconfig.ini', 'layout');
+	
 	foreach($layout_defaults->toArray() as $key=>$val)
 		Zend_Layout::getMvcInstance()->$key = $val;
 	
@@ -117,7 +124,7 @@
 	}
 	catch(Exception $e)
 	{
-		$logger->log(Vp_Util::formatException($e), Zend_Log::ALERT);
+		$logger->log(Gtwebdev_Util::formatException($e), Zend_Log::ALERT);
 		header('Location: /error');
 		return;
 	}
