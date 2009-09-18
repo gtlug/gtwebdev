@@ -4,11 +4,11 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<!--title>&lt;? gt_webdev(); ?&gt; /* grand traverse area web development group */</title-->
 	<title><?= $this->layout()->site ?></title>
-	<?= $this->headStyle() ?>
+	<?/*= $this->headStyle() */?>
 	<link href="css/main.css" type="text/css" rel="stylesheet" />
 	<script src="/js/prototype.js" type="text/javascript" language="javascript"></script>
 	<script src="/js/common.js" type="text/javascript" language="javascript"></script>
-	<?= $this->headScript() ?>
+	<?/*= $this->headScript() */?>
 </head>
 
 <body>
