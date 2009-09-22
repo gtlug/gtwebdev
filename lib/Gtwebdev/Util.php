@@ -1,5 +1,10 @@
 <?php
 class Gtwebdev_Util {
+	/**
+	 * @deprecated use Gtwebdev_Exception::format()
+	 * @param $e
+	 * @return unknown_type
+	 */
 	function formatException(Exception $e)
 	{
 		return 
