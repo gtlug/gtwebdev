@@ -80,7 +80,7 @@
 	
 	// Setup view object
 	$view = new Zend_View();
-	$view->addHelperPath('Demo/View/Helper/', 'Demo_View_Helper_');
+	$view->addHelperPath('Gtwebdev/View/Helper/', 'Gtwebdev_View_Helper_');
 	$view->addBasePath($appication_root . 'views');
 	Zend_Registry::set('view',$view);
 	
@@ -110,7 +110,7 @@
 	));
 	$view = null;
 	$view = Zend_Layout::getMvcInstance()->getView();
-	$view->addHelperPath('Demo/View/Helper/', 'Demo_View_Helper_');
+	$view->addHelperPath('Gtwebdev/View/Helper/', 'Gtwebdev_View_Helper_');
 	Zend_Layout::getMvcInstance()->setView($view);
 	$layout_defaults = new Zend_Config_Ini($site_root. 'etc/siteconfig.ini', 'layout');
 	
