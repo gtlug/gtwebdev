@@ -1,5 +1,5 @@
 <?php
-abstract class Home_Controller_Abstract extends Zend_Controller_Action
+abstract class Search_Controller_Abstract extends Zend_Controller_Action
 {
 	public function init()
 	{
