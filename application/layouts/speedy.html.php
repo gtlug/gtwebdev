@@ -52,7 +52,7 @@
 		
 		$gtutil->addLeftContent('Search Manuals','search', 
 			'
-				<form method="get" action="http://www.gtwebdev.org/search.php" target="_top">
+				<form method="get" action="/search" target="_top">
 					<input type="hidden" name="domains" value="www.php.net;dev.mysql.com;httpd.apache.org"></input>
 					<label for="sbi" style="display: none">Enter your search terms</label>
 					<input type="text" name="q" size="31" maxlength="255" value="" id="sbi" style="width: 180px;"></input>
@@ -140,8 +140,8 @@
 				?>
 			</div>
 			<div id="right">
-				<h2><?= $this->pageHeader ?></h2>
-				<?= $this->pageContent ?>
+				<h2><?= $this->layout()->contentHeader ?></h2>
+				<?= $this->layout()->content ?>
 			</div>
 			<div style="clear:both"></div>
 		</div>

@@ -1,7 +1,8 @@
 <?php
-	$this->pageHeader = "Search Results";
+	$this->layout()->contentHeader = "Search Results";
 ?>
 <form method="get" action="/search" target="_top">
+<div style="float:left">
 	<input type="hidden" name="domains" value="www.php.net;dev.mysql.com;httpd.apache.org"></input>
 	<label for="sbi" style="display: none">Enter your search terms</label>
 	<input type="text" name="q" size="31" maxlength="255" value="<?= isset($_GET['q']) ? $_GET['q'] : "" ?>" id="sbi" style="width: 180px;"></input>
@@ -10,6 +11,7 @@
 
 	<input type="submit" name="sa" value="Search" id="sbb"></input>
 	<a href="http://www.google.com/"><img src="http://www.google.com/logos/Logo_25wht.gif" border="0" alt="Google" align="top"></img></a>
+</div>
 	<table>
 		<tr>
 			<td>
@@ -42,7 +44,7 @@
 </form>
 
 <!-- Google Search Result Snippet Begins -->
-<div id="googleSearchUnitIframe"></div>
+<div id="googleSearchUnitIframe" style="clear: left;"></div>
 
 <script type="text/javascript">
 <!--
