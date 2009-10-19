@@ -89,8 +89,10 @@ class Gtwebdev_View_Helper_Widgets_Container extends Zend_View_Helper_Placeholde
 		{
 			return $id;
 		}
-		return new Gtwebdev_View_Helper_Widgets_Widget(
+		$widget = new Gtwebdev_View_Helper_Widgets_Widget(
 			$id, $name, $action, $controller, $module, $params
 		);
+		$widget->setView($this->view);
+		return $widget;
 	}
 }
