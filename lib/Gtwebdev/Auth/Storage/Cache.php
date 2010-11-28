@@ -21,7 +21,7 @@ class Gtwebdev_Auth_Storage_Cache implements Zend_Auth_Storage_Interface
 	
 	protected $_priority;
 	
-	public function __contruct($cache, $cacheId, $tags = array(), $specificLifetime = false, $priority = 8)
+	public function __construct($cache, $cacheId, $tags = array(), $specificLifetime = false, $priority = 8)
 	{
 		$this->_cache = $cache;
 		$this->_cacheId = $cacheId;

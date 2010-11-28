@@ -6,6 +6,7 @@ class Gtwebdev_Service_Flickr_Auth
 	 * @var DOMDocument
 	 */
 	protected $_dom;
+	private $_xml;
 	
 	/**
 	 * 
@@ -20,7 +21,7 @@ class Gtwebdev_Service_Flickr_Auth
 		$this->_flickr = $flickr;
 	}
 	
-	protected function _get($name, $returnValue = true)
+	protected function _getElement($name, $returnValue = true)
 	{
 		$xpath = new DOMXPath($this->_dom);
         $element = $xpath->query("//$name")->item(0);
@@ -30,17 +31,17 @@ class Gtwebdev_Service_Flickr_Auth
 	
 	public function getToken()
 	{
-		return $this->_get('token');
+		return $this->_getElement('token');
 	}
 	
 	public function getPerms()
 	{
-		return $this->_get('perms');
+		return $this->_getElement('perms');
 	}
 	
 	public function getUser()
 	{
-		$user = $this->_get('user', false);
+		$user = $this->_getElement('user', false);
 		$attribs = array(
 			'nsid','username','fullname'
 		);
@@ -51,5 +52,17 @@ class Gtwebdev_Service_Flickr_Auth
 		}
 		return $result;
 	}
+	
+    public function __sleep()
+    {
+    	$this->_xml = $this->_dom->saveXML();
+        return array('_flickr', '_xml');
+    }
+    
+    public function __wakeup()
+    {
+        $this->_dom = new DOMDocument();
+        $this->_dom->loadXML($this->_xml);
+    }
 	
 }

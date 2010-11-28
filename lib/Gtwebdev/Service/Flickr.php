@@ -6,6 +6,9 @@ class Gtwebdev_Service_Flickr extends Zend_Service_Flickr
 	const PERMS_WRITE = 'write';
 	const PERMS_DELETE = 'delete';
 	
+	public $token = null;
+	public $secret = null;
+	
     /**
      * Find Flickr photos by tag.
      *
@@ -60,8 +63,12 @@ class Gtwebdev_Service_Flickr extends Zend_Service_Flickr
      * @return Zend_Service_Flickr_ResultSet
      * @throws Zend_Service_Exception
      */
-    public function getFrob($secret, array $options = array())
+    public function getFrob($secret = null, array $options = array())
     {
+    	if(null === $secret)
+    	{
+    		$secret = $this->secret;
+    	} 
         static $method = 'flickr.auth.getFrob';
         static $defaultOptions = array();
 
@@ -169,4 +176,115 @@ class Gtwebdev_Service_Flickr extends Zend_Service_Flickr
     	return $options;
     }
 
+    /**
+     * Find Flickr photos by tag.
+     *
+     * Query options include:
+     *
+     *  # per_page:        how many results to return per query
+     *  # page:            the starting page offset.  first result will be (page - 1) * per_page + 1
+     *  # tag_mode:        Either 'any' for an OR combination of tags,
+     *                     or 'all' for an AND combination. Default is 'any'.
+     *  # min_upload_date: Minimum upload date to search on.  Date should be a unix timestamp.
+     *  # max_upload_date: Maximum upload date to search on.  Date should be a unix timestamp.
+     *  # min_taken_date:  Minimum upload date to search on.  Date should be a MySQL datetime.
+     *  # max_taken_date:  Maximum upload date to search on.  Date should be a MySQL datetime.
+     *
+     * @param  string|array $query   A single tag or an array of tags.
+     * @param  array        $options Additional parameters to refine your query.
+     * @return Zend_Service_Flickr_ResultSet
+     * @throws Zend_Service_Exception
+     */
+    public function privateTagSearch($query, $secret, array $options = array())
+    {
+        static $method = 'flickr.photos.search';
+        static $defaultOptions = array('per_page' => 10,
+                                       'page'     => 1,
+                                       'tag_mode' => 'or',
+                                       'extras'   => 'license, date_upload, date_taken, owner_name, icon_server');
+
+        $options['tags'] = is_array($query) ? implode(',', $query) : $query;
+
+        $options = $this->_prepareOptions($method, $options, $defaultOptions);
+
+        $this->_validateTagSearch($options);
+        $options = $this->signOptions($secret, $options);
+
+        // now search for photos
+        $restClient = $this->getRestClient();
+        $restClient->getHttpClient()->resetParameters();
+        $response = $restClient->restGet('/services/rest/', $options);
+
+        if ($response->isError()) {
+            /**
+             * @see Zend_Service_Exception
+             */
+            require_once 'Zend/Service/Exception.php';
+            throw new Zend_Service_Exception('An error occurred sending request. Status code: '
+                                           . $response->getStatus());
+        }
+
+        $dom = new DOMDocument();
+        $dom->loadXML($response->getBody());
+
+        self::_checkErrors($dom);
+
+        /**
+         * @see Zend_Service_Flickr_ResultSet
+         */
+        require_once 'Zend/Service/Flickr/ResultSet.php';
+        return new Zend_Service_Flickr_ResultSet($dom, $this);
+    }
+    
+   /**
+     * Returns Flickr photo details by for the given photo ID
+     *
+     * @param  string $id the NSID
+     * @return array of Zend_Service_Flickr_Image, details for the specified image
+     * @throws Zend_Service_Exception
+     */
+    public function getImageDetails($id)
+    {
+    	if(!$this->token)
+    	{
+    		return parent::getImageDetails($id);
+    	}
+    	
+        static $method = 'flickr.photos.getSizes';
+
+        if (empty($id)) {
+            /**
+             * @see Zend_Service_Exception
+             */
+            require_once 'Zend/Service/Exception.php';
+            throw new Zend_Service_Exception('You must supply a photo ID');
+        }
+        $options = array(
+        	'api_key' => $this->apiKey,
+        	'auth_token' => $this->token, 
+        	'method' => $method, 
+        	'photo_id' => $id
+        );
+        $options = $this->signOptions($this->secret, $options);
+
+        $restClient = $this->getRestClient();
+        $restClient->getHttpClient()->resetParameters();
+        $response = $restClient->restGet('/services/rest/', $options);
+
+        $dom = new DOMDocument();
+        $dom->loadXML($response->getBody());
+        $xpath = new DOMXPath($dom);
+        self::_checkErrors($dom);
+        $retval = array();
+        /**
+         * @see Zend_Service_Flickr_Image
+         */
+        require_once 'Zend/Service/Flickr/Image.php';
+        foreach ($xpath->query('//size') as $size) {
+            $label = (string) $size->getAttribute('label');
+            $retval[$label] = new Zend_Service_Flickr_Image($size);
+        }
+
+        return $retval;
+    }
 }
