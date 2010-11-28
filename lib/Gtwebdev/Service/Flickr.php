@@ -1,0 +1,172 @@
+<?php
+class Gtwebdev_Service_Flickr extends Zend_Service_Flickr
+{
+
+	const PERMS_READ = 'read';
+	const PERMS_WRITE = 'write';
+	const PERMS_DELETE = 'delete';
+	
+    /**
+     * Find Flickr photos by tag.
+     *
+     * Query options include:
+     *
+     *  # per_page:        how many results to return per query
+     *  # page:            the starting page offset.  first result will be (page - 1) * per_page + 1
+     *  # tag_mode:        Either 'any' for an OR combination of tags,
+     *                     or 'all' for an AND combination. Default is 'any'.
+     *  # min_upload_date: Minimum upload date to search on.  Date should be a unix timestamp.
+     *  # max_upload_date: Maximum upload date to search on.  Date should be a unix timestamp.
+     *  # min_taken_date:  Minimum upload date to search on.  Date should be a MySQL datetime.
+     *  # max_taken_date:  Maximum upload date to search on.  Date should be a MySQL datetime.
+     *
+     * @param  string|array $query   A single tag or an array of tags.
+     * @param  array        $options Additional parameters to refine your query.
+     * @return Zend_Service_Flickr_ResultSet
+     * @throws Zend_Service_Exception
+     */
+    public function authenticationUrl($secret, $frob = null, $perms = self::PERMS_READ, array $options = array())
+    {
+    	static $baseUrl = "http://flickr.com/services/auth/?";
+        $defaultOptions = array(
+        	'api_key' => $this->apiKey,
+           	'frob' => (null !== $frob) ? $frob : ($frob = $this->getFrob($secret)),
+        	'perms' => (string)$perms
+        );
+        $options = array_merge($defaultOptions, $options);
+        $options = $this->signOptions($secret, $options);
+
+        $url = $baseUrl . http_build_query($options);
+
+        return $url;
+    }
+    
+    /**
+     * Find Flickr photos by tag.
+     *
+     * Query options include:
+     *
+     *  # per_page:        how many results to return per query
+     *  # page:            the starting page offset.  first result will be (page - 1) * per_page + 1
+     *  # tag_mode:        Either 'any' for an OR combination of tags,
+     *                     or 'all' for an AND combination. Default is 'any'.
+     *  # min_upload_date: Minimum upload date to search on.  Date should be a unix timestamp.
+     *  # max_upload_date: Maximum upload date to search on.  Date should be a unix timestamp.
+     *  # min_taken_date:  Minimum upload date to search on.  Date should be a MySQL datetime.
+     *  # max_taken_date:  Maximum upload date to search on.  Date should be a MySQL datetime.
+     *
+     * @param  string|array $query   A single tag or an array of tags.
+     * @param  array        $options Additional parameters to refine your query.
+     * @return Zend_Service_Flickr_ResultSet
+     * @throws Zend_Service_Exception
+     */
+    public function getFrob($secret, array $options = array())
+    {
+        static $method = 'flickr.auth.getFrob';
+        static $defaultOptions = array();
+
+        $options = $this->_prepareOptions($method, $options, $defaultOptions);
+        $options = $this->signOptions($secret, $options);
+
+        // now search for photos
+        $restClient = $this->getRestClient();
+        $restClient->getHttpClient()->resetParameters();
+        $response = $restClient->restGet('/services/rest/', $options);
+
+        if ($response->isError()) {
+            /**
+             * @see Zend_Service_Exception
+             */
+            require_once 'Zend/Service/Exception.php';
+            throw new Zend_Service_Exception('An error occurred sending request. Status code: '
+                                           . $response->getStatus());
+        }
+
+        $dom = new DOMDocument();
+        $dom->loadXML($response->getBody());
+
+        self::_checkErrors($dom);
+
+        $xpath = new DOMXPath($dom);
+        $frob = $xpath->query('//frob')->item(0);
+        
+        return $frob->nodeValue;
+    }
+    
+    /**
+     * Find Flickr photos by tag.
+     *
+     * Query options include:
+     *
+     *  # per_page:        how many results to return per query
+     *  # page:            the starting page offset.  first result will be (page - 1) * per_page + 1
+     *  # tag_mode:        Either 'any' for an OR combination of tags,
+     *                     or 'all' for an AND combination. Default is 'any'.
+     *  # min_upload_date: Minimum upload date to search on.  Date should be a unix timestamp.
+     *  # max_upload_date: Maximum upload date to search on.  Date should be a unix timestamp.
+     *  # min_taken_date:  Minimum upload date to search on.  Date should be a MySQL datetime.
+     *  # max_taken_date:  Maximum upload date to search on.  Date should be a MySQL datetime.
+     *
+     * @param  string|array $query   A single tag or an array of tags.
+     * @param  array        $options Additional parameters to refine your query.
+     * @return DOMDocument
+     * @throws Zend_Service_Exception
+     */
+    public function getToken($secret, $frob = null, array $options = array())
+    {
+        static $method = 'flickr.auth.getToken';
+        $defaultOptions = array(
+        	'frob' => (null !== $frob) ? $frob : ($frob = $this->getFrob($secret))
+        );
+
+        $options = $this->_prepareOptions($method, $options, $defaultOptions);
+        $options = $this->signOptions($secret, $options);
+
+        // now search for photos
+        $restClient = $this->getRestClient();
+        $restClient->getHttpClient()->resetParameters();
+        $response = $restClient->restGet('/services/rest/', $options);
+
+        if ($response->isError()) {
+            /**
+             * @see Zend_Service_Exception
+             */
+            require_once 'Zend/Service/Exception.php';
+            throw new Zend_Service_Exception('An error occurred sending request. Status code: '
+                                           . $response->getStatus());
+        }
+
+        $dom = new DOMDocument();
+        $dom->loadXML($response->getBody());
+
+        self::_checkErrors($dom);
+        
+        return new Gtwebdev_Service_Flickr_Auth($dom, $this);
+    }
+    
+    public function signOptions($secret, $options)
+    {
+    	/* FROM: http://www.flickr.com/services/api/auth.spec.html
+		 * Sort your argument list into alphabetical order based on the parameter name.
+	     * e.g. foo=1, bar=2, baz=3 sorts to bar=2, baz=3, foo=1
+	     * concatenate the shared secret and argument name-value pairs
+	     * e.g. SECRETbar2baz3foo1
+	     * calculate the md5() hash of this string
+	     * append this value to the argument list with the name api_sig, in hexidecimal string form
+	     * e.g. api_sig=1f3870be274f6c49b3e31a0c6728957f
+		 */
+
+    	// just in case options was already signed
+    	unset($options['api_sig']);
+    	
+    	$phrase = "";
+    	ksort($options);
+    	foreach($options as $k=>$v)
+    		$phrase .= "$k$v";
+    		
+    	$apiSig = md5($secret . $phrase);
+    	$options['api_sig'] = $apiSig;
+    	return $options;
+    }
+
+}
