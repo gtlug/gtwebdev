@@ -9,6 +9,11 @@ class Gtwebdev_Service_Flickr extends Zend_Service_Flickr
 	public $token = null;
 	public $secret = null;
 	
+	public static function checkErrors($dom)
+	{
+		return self::_checkErrors($dom);
+	}
+	
     /**
      * Find Flickr photos by tag.
      *
