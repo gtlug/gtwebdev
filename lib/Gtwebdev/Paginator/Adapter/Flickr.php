@@ -116,7 +116,7 @@ class Gtwebdev_Paginator_Adapter_Flickr implements Zend_Paginator_Adapter_Interf
             return array();
         }
         $options = $this->_options;
-        $options['page'] = $offset;
+        $options['page'] = floor($offset / $itemCountPerPage) + 1;
     	$options['per_page'] = $itemCountPerPage;
     	
         return $this->_fetch($options);
