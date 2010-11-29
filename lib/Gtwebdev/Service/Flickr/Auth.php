@@ -48,7 +48,7 @@ class Gtwebdev_Service_Flickr_Auth
 		$result = array();
 		foreach($attribs as $attrib)
 		{
-			$attrib = $user->getAttribute($attrib);
+			$result[$attrib] = $user->getAttribute($attrib);
 		}
 		return $result;
 	}
