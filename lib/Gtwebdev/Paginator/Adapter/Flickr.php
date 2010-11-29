@@ -96,11 +96,8 @@ class Gtwebdev_Paginator_Adapter_Flickr implements Zend_Paginator_Adapter_Interf
 
         Gtwebdev_Service_Flickr::checkErrors($dom);
 
-        /**
-         * @see Zend_Service_Flickr_ResultSet
-         */
-        require_once 'Zend/Service/Flickr/ResultSet.php';
-        return new Zend_Service_Flickr_ResultSet($dom, $flickr);
+        require_once 'Gtwebdev/Service/Flickr/ResultSet.php';
+        return new Gtwebdev_Service_Flickr_ResultSet($dom, $flickr);
     }
 
     /**
